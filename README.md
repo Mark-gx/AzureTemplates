@@ -41,7 +41,7 @@ To deploy a NVA (Virtual Firewall/Router) visit my forked repo (Readme) from the
 
 [![Deploy To Azure](https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/1-CONTRIBUTION-GUIDE/images/deploytoazure.svg?sanitize=true)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fdmauser%2Fopnazure%2Fmaster%2FARM%2Fmain.json%3F/uiFormDefinitionUri/https%3A%2F%2Fraw.githubusercontent.com%2Fdmauser%2Fopnazure%2Fmaster%2Fbicep%2FuiFormDefinition.json)
 
-# Storage Accounts
+# Storage Templates
 ## Azure Files Premium (FsLogix)
 
 This template deploys a standardized Premium Performance Storage Account, often used for FsLogix
