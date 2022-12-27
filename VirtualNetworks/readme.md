@@ -2,7 +2,8 @@
 
 This template deploys a standardized Network setup to use as a HUB in the Hub and spoke model, If you use a VPN Gateway (manual setup) recommended Subnet is 10.100.0.0/24
 
-VNet-Hub-CoreServices-WestEurope 10.100.0.0/21
+This template deploys the following:
+* VNet-Hub-CoreServices-WestEurope 10.100.0.0/21 (HUB VNET)
 * WANSubnet 10.100.1.0/24
 * LANSubnet 10.100.2.0/24
 * IdentitySubnet 10.100.3.0/24
