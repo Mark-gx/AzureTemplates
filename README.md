@@ -1,4 +1,4 @@
-## Introduction
+# Introduction
 To greatly increase standardization across deployed Azure Services and speed up the deployment time for hub networks and the associated resources i have created a few templates to help with this. In this repository i will maintain and improve a (public) version of these templates.
 
 ## Requirements:
@@ -28,7 +28,6 @@ This template deploys the following:
 WAN Subnet is for the NVA WAN/Untrusted NIC, LAN Subnet for the LAN/Trusted NIC, Identity Subnet for Windows ADC and Storage Subnet for (potential) private Storage Endpoints.
 
 
-
 [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FMark-gx%2FAzureTemplates%2Fmain%2FVirtualNetworks%2FVNet-Hub-Networking%2Ftemplate.json)
 
 ## NSG Deployment
@@ -40,7 +39,36 @@ This template deploys 2 (unassociated) NSGs for the Identity and Storage Subnets
 
 ## NVA Deployment
 
-To deploy a NVA (Virtual Firewall/Router) visit my forked repo (Readme) from the OPNAzure project by DMauser: https://github.com/Mark-gx/opnazure, the 2 Nic deployment is best suited for this Hub Network.
+To deploy a NVA (Virtual Firewall/Router) visit my forked repo (Readme) from the OPNAzure project by DMauser: https://github.com/Mark-gx/opnazure, the 2 Nic deployment is best suited for this Hub Network. Make sure to read the readme here: https://github.com/dmauser/opnazure#readme
 
-Note: this deployment can take a while! make sure to read the readme here: https://github.com/dmauser/opnazure#readme
+[![Deploy To Azure](https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/1-CONTRIBUTION-GUIDE/images/deploytoazure.svg?sanitize=true)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fdmauser%2Fopnazure%2Fmaster%2FARM%2Fmain.json%3F/uiFormDefinitionUri/https%3A%2F%2Fraw.githubusercontent.com%2Fdmauser%2Fopnazure%2Fmaster%2Fbicep%2FuiFormDefinition.json)
+
+# Storage Accounts
+## Azure Files Premium (FsLogix)
+
+This template deploys a standardized Premium Performance Storage Account, often used for FsLogix
+
+This template deploys the following:
+* Storage account (files) optimized for FsLogix implementations, Premium LRS.
+* Adjusts storage account minimum TLS Protocol to 1.2 instead of 1.0
+* limits storage account name to 15 tokens to prevent Windows AD max character limit for computer accounts.
+
+
+[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FMark-gx%2FAzureTemplates%2Fmain%2FStorage%2FDeployPremiumStorageLRS%2FStoragePremiumLRS.json)
+
+
+## Azure Files Standardv2 (Regular shares)
+
+This template deploys a standardized standard storage account v2, often used for regular fileshares.
+
+This template deploys the following:
+* Storage account v2 in the Hot Access tier.
+* Adjusts storage account minimum TLS Protocol to 1.2 instead of 1.0
+* limits storage account name to 15 tokens to prevent Windows AD max character limit for computer accounts.
+
+
+Note: to get an azure transactional file share you still have to create it manually.
+
+
+[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FMark-gx%2FAzureTemplates%2Fmain%2FStorage%2FDeployStandardHotLRS%2FDeployStoragev2HotLRS.json)
 
