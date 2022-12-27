@@ -49,7 +49,7 @@
       "maxLength": 62,
       "minLength": 1,
       "metadata": {
-        "description": "Unique public DNS prefix for the deployment AND VM name. The fqdn will look something like '<dnsname>.westus.cloudapp.azure.com'. Up to 62 chars, digits or dashes, lowercase, should start with a letter: must conform to '^[a-z][a-z0-9-]{1,61}[a-z0-9]$'."
+        "description": "Unique public DNS prefix for the deployment AND VM name. The fqdn will look like '<dnsname>.region.cloudapp.azure.com'. Up to 62 chars, should start with a letter: must conform to '^[a-z][a-z0-9-]{1,61}[a-z0-9]$'."
       }
     },
     "adminUsername": {
@@ -102,7 +102,7 @@
           {
             "name": "ipconfig1",
             "properties": {
-              "privateIPAllocationMethod": "static",
+              "privateIPAllocationMethod": "dynamic",
               "publicIPAddress": {
                 "id": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddressName'))]"
               },
