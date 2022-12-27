@@ -1,2 +1,2 @@
 # AzureTemplates
-All Azure Templates go here
+Repository for all my Public Azure Deployment templates.
