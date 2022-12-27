@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.13.1.58284",
-      "templateHash": "12876096939928059110"
+      "templateHash": "604002635478332966"
     }
   },
   "parameters": {
@@ -34,6 +34,9 @@
       "kind": "FileStorage",
       "sku": {
         "name": "Premium_LRS"
+      },
+      "properties": {
+        "minimumTlsVersion": "TLS1_2"
       }
     }
   ]
