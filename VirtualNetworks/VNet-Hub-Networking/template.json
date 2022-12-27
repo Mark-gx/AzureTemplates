@@ -4,52 +4,62 @@
   "metadata": {
     "_generator": {
       "name": "bicep",
-      "version": "0.9.1.41621",
-      "templateHash": "16181670085069590136"
+      "version": "0.13.1.58284",
+      "templateHash": "10965500231024668983"
     }
   },
   "parameters": {
-    "vnetName": {
+    "vnetName1": {
       "type": "string",
-      "defaultValue": "VNet-Hub-Networking-WestEurope",
+      "defaultValue": "VNet-Hub-Coreservices-WestEurope",
       "metadata": {
         "description": "VNet name"
       }
     },
-    "vnetAddressPrefix": {
+    "vnetAddressPrefix1": {
       "type": "string",
-      "defaultValue": "10.100.0.0/20",
+      "defaultValue": "10.100.0.0/21",
       "metadata": {
         "description": "Address prefix"
       }
     },
     "subnet1Prefix": {
       "type": "string",
-      "defaultValue": "10.100.0.0/24",
+      "defaultValue": "10.100.1.0/24",
       "metadata": {
-        "description": "Subnet 1 Prefix"
+        "description": "Subnet Prefix"
       }
+    },
+    "subnet2Prefix": {
+      "type": "string",
+      "defaultValue": "10.100.2.0/24"
+    },
+    "subnet3Prefix": {
+      "type": "string",
+      "defaultValue": "10.100.3.0/24"
+    },
+    "subnet4Prefix": {
+      "type": "string",
+      "defaultValue": "10.100.4.0/24"
     },
     "subnet1Name": {
       "type": "string",
       "defaultValue": "WANSubnet",
       "metadata": {
-        "description": "Subnet 1 Name"
-      }
-    },
-    "subnet2Prefix": {
-      "type": "string",
-      "defaultValue": "10.100.1.0/24",
-      "metadata": {
-        "description": "Subnet 2 Prefix"
+        "description": "Subnet Name"
       }
     },
     "subnet2Name": {
       "type": "string",
-      "defaultValue": "LANSubnet",
-      "metadata": {
-        "description": "Subnet 2 Name"
-      }
+      "defaultValue": "LANSubnet"
+    },
+    "subnet3Name": {
+      "type": "string",
+      "defaultValue": "IdentitySubnet"
+    },
+    "subnet4Name": {
+      "type": "string",
+      "defaultValue": "StorageSubnet"
     },
     "location": {
       "type": "string",
@@ -62,13 +72,13 @@
   "resources": [
     {
       "type": "Microsoft.Network/virtualNetworks",
-      "apiVersion": "2021-08-01",
-      "name": "[parameters('vnetName')]",
+      "apiVersion": "2022-07-01",
+      "name": "[parameters('vnetName1')]",
       "location": "[parameters('location')]",
       "properties": {
         "addressSpace": {
           "addressPrefixes": [
-            "[parameters('vnetAddressPrefix')]"
+            "[parameters('vnetAddressPrefix1')]"
           ]
         },
         "subnets": [
@@ -82,6 +92,18 @@
             "name": "[parameters('subnet2Name')]",
             "properties": {
               "addressPrefix": "[parameters('subnet2Prefix')]"
+            }
+          },
+          {
+            "name": "[parameters('subnet3Name')]",
+            "properties": {
+              "addressPrefix": "[parameters('subnet3Prefix')]"
+            }
+          },
+          {
+            "name": "[parameters('subnet4Name')]",
+            "properties": {
+              "addressPrefix": "[parameters('subnet4Prefix')]"
             }
           }
         ]
