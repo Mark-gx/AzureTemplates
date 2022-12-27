@@ -8,8 +8,6 @@ To greatly increase standardization across deployed Azure Services and speed up 
 ## What are we bulding?
 We are building the foundations of a HUB and SPOKE network. Hub and spoke networks greatly increase modularity of your environment by grouping together shared services such as NVA's (Firewall/Router), Domain Controllers, Storage Endpoints and ofcourse the option to centrally house VPN Gateways. 
 
-Adding new Workloads in new VNets (Spokes) simply mean you have to deploy a route to point local/east-west traffic to the NVA Lan Nic, after that you can manage the network traffic via your firewall. This increases security and managebility.
-
 I will add a "visio" drawing at a later date to visualize this.
 
 
