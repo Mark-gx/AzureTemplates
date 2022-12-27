@@ -1,0 +1,169 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "virtualNetworks_VNet_Hub_Networking_WestEurope_name": {
+            "defaultValue": "VNet-Hub-Networking-WestEurope",
+            "type": "String"
+        },
+        "virtualNetworks_VNet_Spoke_CoreServices_WestEurope_name": {
+            "defaultValue": "VNet-Spoke-CoreServices-WestEurope",
+            "type": "String"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.Network/virtualNetworks/subnets",
+            "apiVersion": "2022-05-01",
+            "name": "[concat(parameters('virtualNetworks_VNet_Spoke_CoreServices_WestEurope_name'), '/IdentitySubnet')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworks_VNet_Spoke_CoreServices_WestEurope_name'))]"
+            ],
+            "properties": {
+                "addressPrefix": "10.110.0.0/24",
+                "delegations": [],
+                "privateEndpointNetworkPolicies": "Disabled",
+                "privateLinkServiceNetworkPolicies": "Enabled"
+            }
+        },
+        {
+            "type": "Microsoft.Network/virtualNetworks/subnets",
+            "apiVersion": "2022-05-01",
+            "name": "[concat(parameters('virtualNetworks_VNet_Hub_Networking_WestEurope_name'), '/LANSubnet')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworks_VNet_Hub_Networking_WestEurope_name'))]"
+            ],
+            "properties": {
+                "addressPrefix": "10.100.1.0/24",
+                "delegations": [],
+                "privateEndpointNetworkPolicies": "Disabled",
+                "privateLinkServiceNetworkPolicies": "Enabled"
+            }
+        },
+        {
+            "type": "Microsoft.Network/virtualNetworks/subnets",
+            "apiVersion": "2022-05-01",
+            "name": "[concat(parameters('virtualNetworks_VNet_Spoke_CoreServices_WestEurope_name'), '/StorageSubnet')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworks_VNet_Spoke_CoreServices_WestEurope_name'))]"
+            ],
+            "properties": {
+                "addressPrefix": "10.110.1.0/24",
+                "delegations": [],
+                "privateEndpointNetworkPolicies": "Disabled",
+                "privateLinkServiceNetworkPolicies": "Enabled"
+            }
+        },
+        {
+            "type": "Microsoft.Network/virtualNetworks/subnets",
+            "apiVersion": "2022-05-01",
+            "name": "[concat(parameters('virtualNetworks_VNet_Hub_Networking_WestEurope_name'), '/WANSubnet')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworks_VNet_Hub_Networking_WestEurope_name'))]"
+            ],
+            "properties": {
+                "addressPrefix": "10.100.0.0/24",
+                "delegations": [],
+                "privateEndpointNetworkPolicies": "Disabled",
+                "privateLinkServiceNetworkPolicies": "Enabled"
+            }
+        },
+        {
+            "type": "Microsoft.Network/virtualNetworks",
+            "apiVersion": "2022-05-01",
+            "name": "[parameters('virtualNetworks_VNet_Hub_Networking_WestEurope_name')]",
+            "location": "westeurope",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_VNet_Hub_Networking_WestEurope_name'), 'WANSubnet')]",
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_VNet_Hub_Networking_WestEurope_name'), 'LANSubnet')]"
+            ],
+            "tags": {
+                "ResourceFamily": "Networking",
+                "Hierarchy": "Hub",
+                "Location": "WestEurope"
+            },
+            "properties": {
+                "addressSpace": {
+                    "addressPrefixes": [
+                        "10.100.0.0/20"
+                    ]
+                },
+                "subnets": [
+                    {
+                        "name": "WANSubnet",
+                        "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_VNet_Hub_Networking_WestEurope_name'), 'WANSubnet')]",
+                        "properties": {
+                            "addressPrefix": "10.100.0.0/24",
+                            "delegations": [],
+                            "privateEndpointNetworkPolicies": "Disabled",
+                            "privateLinkServiceNetworkPolicies": "Enabled"
+                        },
+                        "type": "Microsoft.Network/virtualNetworks/subnets"
+                    },
+                    {
+                        "name": "LANSubnet",
+                        "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_VNet_Hub_Networking_WestEurope_name'), 'LANSubnet')]",
+                        "properties": {
+                            "addressPrefix": "10.100.1.0/24",
+                            "delegations": [],
+                            "privateEndpointNetworkPolicies": "Disabled",
+                            "privateLinkServiceNetworkPolicies": "Enabled"
+                        },
+                        "type": "Microsoft.Network/virtualNetworks/subnets"
+                    }
+                ],
+                "virtualNetworkPeerings": [],
+                "enableDdosProtection": false
+            }
+        },
+        {
+            "type": "Microsoft.Network/virtualNetworks",
+            "apiVersion": "2022-05-01",
+            "name": "[parameters('virtualNetworks_VNet_Spoke_CoreServices_WestEurope_name')]",
+            "location": "westeurope",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_VNet_Spoke_CoreServices_WestEurope_name'), 'IdentitySubnet')]",
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_VNet_Spoke_CoreServices_WestEurope_name'), 'StorageSubnet')]"
+            ],
+            "tags": {
+                "ResourceFamily": "CoreServices",
+                "Hierarchy": "Spoke",
+                "Location": "WestEurope"
+            },
+            "properties": {
+                "addressSpace": {
+                    "addressPrefixes": [
+                        "10.110.0.0/22"
+                    ]
+                },
+                "subnets": [
+                    {
+                        "name": "IdentitySubnet",
+                        "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_VNet_Spoke_CoreServices_WestEurope_name'), 'IdentitySubnet')]",
+                        "properties": {
+                            "addressPrefix": "10.110.0.0/24",
+                            "delegations": [],
+                            "privateEndpointNetworkPolicies": "Disabled",
+                            "privateLinkServiceNetworkPolicies": "Enabled"
+                        },
+                        "type": "Microsoft.Network/virtualNetworks/subnets"
+                    },
+                    {
+                        "name": "StorageSubnet",
+                        "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_VNet_Spoke_CoreServices_WestEurope_name'), 'StorageSubnet')]",
+                        "properties": {
+                            "addressPrefix": "10.110.1.0/24",
+                            "delegations": [],
+                            "privateEndpointNetworkPolicies": "Disabled",
+                            "privateLinkServiceNetworkPolicies": "Enabled"
+                        },
+                        "type": "Microsoft.Network/virtualNetworks/subnets"
+                    }
+                ],
+                "virtualNetworkPeerings": [],
+                "enableDdosProtection": false
+            }
+        }
+    ]
+}
