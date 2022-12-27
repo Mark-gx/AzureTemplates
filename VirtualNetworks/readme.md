@@ -8,7 +8,7 @@ This template deploys a standardized Network Hub for a NVA configuration, If you
 
 [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FMark-gx%2FAzureTemplates%2Fmain%2FVirtualNetworks%2FVNet-Hub-Networking%2Ftemplate.json)
 
-# Core Service VNET (Spoke)
+# Core Service VNet (Spoke)
 Deploy a standardized CoreServices Spoke, often used by Domain Controllers (VMs) and Storage Private Endpoints.
 
 * VNet-Spoke-CoreServices-WestEurope 10.110.0.0/20
