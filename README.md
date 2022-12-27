@@ -65,8 +65,5 @@ This template deploys the following:
 * limits storage account name to 15 tokens to prevent Windows AD max character limit for computer accounts.
 
 
-Note: to get an azure transactional file share you still have to create it manually.
-
-
 [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FMark-gx%2FAzureTemplates%2Fmain%2FStorage%2FDeployStandardHotLRS%2FDeployStoragev2HotLRS.json)
 
