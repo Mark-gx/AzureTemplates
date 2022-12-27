@@ -13,4 +13,7 @@ resource sa 'Microsoft.Storage/storageAccounts@2022-09-01' = {
   sku: {
     name: 'Premium_LRS'
   }
+  properties: {
+    minimumTlsVersion: 'TLS1_2'	
+  }
 }
