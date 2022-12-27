@@ -10,7 +10,7 @@ We are building the foundations of a HUB and SPOKE network. Hub and spoke networ
 
 Adding new Workloads in new VNets (Spokes) simply mean you have to deploy a route to point local/east-west traffic to the NVA Lan Nic, after that you can manage the network traffic via your firewall. This increases security and managebility.
 
-I will add a visio drawing at a later date to visualize this.
+I will add a "visio" drawing at a later date to visualize this.
 
 
 # Templates (Deployables)
