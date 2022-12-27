@@ -1,228 +1,174 @@
 {
   "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
+  "metadata": {
+    "_generator": {
+      "name": "bicep",
+      "version": "0.13.1.58284",
+      "templateHash": "1781762186448713163"
+    }
+  },
   "parameters": {
-    "location": {
+    "vmSize": {
       "type": "string",
-      "metadata": {
-        "description": "Deployment location"
-      }
-    },
-    "windowsOSVersion": {
-      "type": "string",
-      "defaultValue": "2022-datacenter-azure-edition-smalldisk",
+      "defaultValue": "Standard_B2ms",
       "allowedValues": [
-        "2016-Datacenter",
-        "2019-Datacenter",
-        "2022-datacenter-azure-edition-smalldisk"
+        "Standard B2s",
+        "Standard_B2ms",
+        "Standard_B4ms",
+        "Standard_D2as_v5",
+        "Standard_D4as_v5"
       ],
       "metadata": {
-        "description": "The Windows version for the VM. This will pick a fully patched image of this given Windows version."
+        "description": "Size of VM"
       }
     },
-    "vmName": {
+    "existingVnetName": {
       "type": "string",
+      "defaultValue": "VNet-Hub-Coreservices-WestEurope",
       "metadata": {
-        "title": "VM Name",
-        "description": "This is the name of the your VM"
+        "description": "Existing VNET that contains the domain controller"
+      }
+    },
+    "publicIPAddressName": {
+      "type": "string",
+      "defaultValue": "[format('{0}-pip', parameters('dnsLabelPrefix'))]",
+      "metadata": {
+        "description": "Public IP address name"
+      }
+    },
+    "existingSubnetName": {
+      "type": "string",
+      "defaultValue": "IdentitySubnet",
+      "metadata": {
+        "description": "Existing subnet that contains the domain controller"
+      }
+    },
+    "dnsLabelPrefix": {
+      "type": "string",
+      "maxLength": 62,
+      "minLength": 1,
+      "metadata": {
+        "description": "Unique public DNS prefix for the deployment AND VM name. The fqdn will look something like '<dnsname>.westus.cloudapp.azure.com'. Up to 62 chars, digits or dashes, lowercase, should start with a letter: must conform to '^[a-z][a-z0-9-]{1,61}[a-z0-9]$'."
       }
     },
     "adminUsername": {
       "type": "string",
-      "defaultValue": "campai-local",
+      "defaultValue": "campaiadmin",
       "metadata": {
-        "description": "Username for the Virtual Machine."
+        "description": "The name of the administrator of the new VM."
       }
     },
     "adminPassword": {
-      "type": "securestring",
+      "type": "secureString",
       "metadata": {
-        "description": "Password for the Virtual Machine."
+        "description": "The password for the administrator account of the new VM."
       }
     },
-    "virtualNetworkName": {
+    "location": {
       "type": "string",
+      "defaultValue": "[resourceGroup().location]",
       "metadata": {
-        "description": "New or Existing VNet Name"
-      }
-    },
-    "virtualNetworkNewOrExisting": {
-      "type": "string",
-      "metadata": {
-        "description": "Boolean indicating whether the VNet is new or existing"
-      }
-    },
-    "virtualNetworkAddressPrefix": {
-      "type": "string",
-      "metadata": {
-        "description": "VNet address prefix"
-      }
-    },
-    "virtualNetworkResourceGroup": {
-      "type": "string",
-      "metadata": {
-        "description": "Resource group of the VNet"
-      }
-    },
-    "virtualMachineSize": {
-      "type": "string",
-      "metadata": {
-        "description": "The size of the VM"
-      }
-    },
-    "subnetName": {
-      "type": "string",
-      "metadata": {
-        "description": "New or Existing subnet Name"
-      }
-    },
-    "subnetAddressPrefix": {
-      "type": "string",
-      "metadata": {
-        "description": "Subnet address prefix"
-      }
-    },
-    "baseUrl": {
-      "type": "string",
-      "defaultValue": "",
-      "metadata": {
-        "artifactsBaseUrl": "",
-        "description": "URL to acquire other templates"
+        "description": "Location for all resources."
       }
     }
   },
   "variables": {
-    "storageAccountName": "[concat(uniquestring(resourceGroup().id), 'sawinvm')]",
-    "publicIPAddressName": "[concat(uniqueString(resourceGroup().id),'IP')]",
-    "vmName": "[parameters('vmName')]",
-    "nicName": "[concat(parameters('vmName'),'Nic')]",
-    "vnetId": {
-      "new": "[resourceId('Microsoft.Network/virtualNetworks',parameters('virtualNetworkName'))]",
-      "existing": "[resourceId(parameters('virtualNetworkResourceGroup'),'Microsoft.Network/virtualNetworks',parameters('virtualNetworkName'))]"
-    },
-    "subnetId": "[concat(variables('vnetId')[parameters('virtualNetworkNewOrExisting')],'/subnets/',parameters('subnetName'))]",
-    "publicIPAddressType": "Dynamic"
+    "imagePublisher": "MicrosoftWindowsServer",
+    "imageOffer": "WindowsServer",
+    "windowsOSVersion": "2022-datacenter-azure-edition-smalldisk",
+    "nicName": "[format('{0}-nic', parameters('dnsLabelPrefix'))]"
   },
   "resources": [
     {
-      "condition": "[equals(parameters('virtualNetworkNewOrExisting'),'new')]",
-      "type": "Microsoft.Network/virtualNetworks",
-      "apiVersion": "2021-02-01",
-      "name": "[parameters('virtualNetworkName')]",
-      "location": "[parameters('location')]",
-      "properties": {
-        "addressSpace": {
-          "addressPrefixes": [
-            "[parameters('virtualNetworkAddressPrefix')]"
-          ]
-        },
-        "subnets": [
-          {
-            "name": "[parameters('subnetName')]",
-            "properties": {
-              "addressPrefix": "[parameters('subnetAddressPrefix')]"
-            }
-          }
-        ]
-      }
-    },
-    {
       "type": "Microsoft.Network/publicIPAddresses",
-      "name": "[variables('publicIPAddressName')]",
       "apiVersion": "2021-02-01",
+      "name": "[parameters('publicIPAddressName')]",
       "location": "[parameters('location')]",
       "properties": {
-        "publicIPAllocationMethod": "[variables('publicIPAddressType')]"
+        "publicIPAllocationMethod": "Dynamic",
+        "dnsSettings": {
+          "domainNameLabel": "[parameters('dnsLabelPrefix')]"
+        }
       }
     },
     {
       "type": "Microsoft.Network/networkInterfaces",
-      "name": "[variables('nicName')]",
       "apiVersion": "2021-02-01",
+      "name": "[variables('nicName')]",
       "location": "[parameters('location')]",
       "properties": {
         "ipConfigurations": [
           {
             "name": "ipconfig1",
             "properties": {
-              "privateIPAllocationMethod": "Dynamic",
+              "privateIPAllocationMethod": "static",
               "publicIPAddress": {
-                "id": "[resourceId('Microsoft.Network/publicIPAddresses',variables('publicIPAddressName'))]"
+                "id": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddressName'))]"
               },
               "subnet": {
-                "id": "[variables('subnetId')]"
+                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('existingVnetName'), parameters('existingSubnetName'))]"
               }
             }
           }
-        ],
-        "enableIPForwarding": true
+        ]
       },
       "dependsOn": [
-        "[concat('Microsoft.Network/publicIPAddresses/', variables('publicIPAddressName'))]",
-        "[resourceId('Microsoft.Network/virtualNetworks/', parameters('virtualNetworkName'))]"
+        "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddressName'))]"
       ]
     },
     {
-      "type": "Microsoft.Storage/storageAccounts",
-      "apiVersion": "2021-04-01",
-      "name": "[variables('storageAccountName')]",
-      "location": "[parameters('location')]",
-      "sku": {
-        "name": "Standard_LRS"
-      },
-      "kind": "Storage",
-      "properties": {}
-    },
-    {
       "type": "Microsoft.Compute/virtualMachines",
-      "apiVersion": "2021-04-01",
-      "name": "[variables('vmName')]",
+      "apiVersion": "2021-03-01",
+      "name": "[parameters('dnsLabelPrefix')]",
       "location": "[parameters('location')]",
-      "dependsOn": [
-        "[resourceId('Microsoft.Storage/storageAccounts/', variables('storageAccountName'))]",
-        "[resourceId('Microsoft.Network/networkInterfaces/', variables('nicName'))]"
-      ],
       "properties": {
         "hardwareProfile": {
-          "vmSize": "[parameters('virtualMachineSize')]"
+          "vmSize": "[parameters('vmSize')]"
         },
         "osProfile": {
-          "computerName": "[variables('vmName')]",
+          "computerName": "[parameters('dnsLabelPrefix')]",
           "adminUsername": "[parameters('adminUsername')]",
           "adminPassword": "[parameters('adminPassword')]"
         },
         "storageProfile": {
           "imageReference": {
-            "publisher": "MicrosoftWindowsServer",
-            "offer": "WindowsServer",
-            "sku": "[parameters('windowsOSVersion')]",
+            "publisher": "[variables('imagePublisher')]",
+            "offer": "[variables('imageOffer')]",
+            "sku": "[variables('windowsOSVersion')]",
             "version": "latest"
           },
           "osDisk": {
+            "name": "[format('{0}-OsDisk', parameters('dnsLabelPrefix'))]",
+            "caching": "ReadWrite",
             "createOption": "FromImage"
           },
           "dataDisks": [
             {
-              "diskSizeGB": 1023,
-              "lun": 0,
-              "createOption": "Empty"
+              "name": "[format('{0}-DataDisk', parameters('dnsLabelPrefix'))]",
+              "caching": "None",
+              "createOption": "Empty",
+              "diskSizeGB": 1024,
+              "lun": 0
             }
           ]
         },
         "networkProfile": {
           "networkInterfaces": [
             {
-              "id": "[resourceId('Microsoft.Network/networkInterfaces',variables('nicName'))]"
+              "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('nicName'))]"
             }
           ]
         },
         "diagnosticsProfile": {
           "bootDiagnostics": {
-            "enabled": true,
-            "storageUri": "[reference(resourceId('Microsoft.Storage/storageAccounts/', variables('storageAccountName'))).primaryEndpoints.blob]"
+            "enabled": false
           }
         }
-      }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/networkInterfaces', variables('nicName'))]"
+      ]
     }
   ]
 }
