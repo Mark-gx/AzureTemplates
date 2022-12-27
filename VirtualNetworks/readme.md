@@ -14,6 +14,13 @@ WAN Subnet is for the NVA WAN/Untrusted NIC, LAN Subnet for the LAN/Trusted NIC,
 
 [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FMark-gx%2FAzureTemplates%2Fmain%2FVirtualNetworks%2FVNet-Hub-Networking%2Ftemplate.json)
 
+# NSG Deployment
+
+This template deploys 2 (unassociated) NSGs for the Identity and Storage Subnets. this is required to allow inter-vnet traversal once you deploy the NVA.
+
+
+[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FMark-gx%2FAzureTemplates%2Fmain%2FVirtualNetworks%2FNSG-HUB-AI1%2FNsg.json)
+
 # NVA Deployment
 
 To deploy a NVA (Virtual Firewall/Router) visit my forked repo (Readme) from the OPNAzure project by DMauser: https://github.com/Mark-gx/opnazure, the 2 Nic deployment is best suited for this Hub Network.
