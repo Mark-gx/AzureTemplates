@@ -67,3 +67,10 @@ This template deploys the following:
 
 [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FMark-gx%2FAzureTemplates%2Fmain%2FStorage%2FDeployStandardHotLRS%2FDeployStoragev2HotLRS.json)
 
+# Compute Template
+## Windows Server 2022 Azure Edition [Small Disk]
+
+This template deploys a standardized config for a lightweight windows server, often used as Domain Controller in my environments. The custom Small Disk image still gives Premium SSD SLA and performance while saving about 15$ a month over the default 128GB P.SSD
+
+[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FMark-gx%2FAzureTemplates%2Fmain%2FCompute%2FServer2022SmallDisk%2FADC2022SmallDisk.json)
+
