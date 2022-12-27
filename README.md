@@ -13,16 +13,34 @@ Adding new Workloads in new VNets (Spokes) simply mean you have to deploy a rout
 I will add a "visio" drawing at a later date to visualize this.
 
 
-# Templates (Deployables)
+# Networking Templates
+## Hub VNet
 
-Deploy Hub VNet
+This template deploys a standardized Network setup to use as a HUB in the Hub and spoke model, If you use a VPN Gateway (manual setup) recommended Subnet is 10.100.0.0/24
 
-Deploy NSGs
+This template deploys the following:
+* VNet-Hub-CoreServices-WestEurope 10.100.0.0/21 (HUB VNET)
+* WANSubnet 10.100.1.0/24
+* LANSubnet 10.100.2.0/24
+* IdentitySubnet 10.100.3.0/24
+* StorageSubnet 10.100.4.0/24
 
-Deploy OPNsense NVA
+WAN Subnet is for the NVA WAN/Untrusted NIC, LAN Subnet for the LAN/Trusted NIC, Identity Subnet for Windows ADC and Storage Subnet for (potential) private Storage Endpoints.
 
-[![Deploy To Azure](https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/1-CONTRIBUTION-GUIDE/images/deploytoazure.svg?sanitize=true)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fdmauser%2Fopnazure%2Fmaster%2FARM%2Fmain.json%3F/uiFormDefinitionUri/https%3A%2F%2Fraw.githubusercontent.com%2Fdmauser%2Fopnazure%2Fmaster%2Fbicep%2FuiFormDefinition.json)
 
-Deploy Storage Account(s)
 
-Deploy Windows Server 2022 Azure Edition [Small Disk]
+[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FMark-gx%2FAzureTemplates%2Fmain%2FVirtualNetworks%2FVNet-Hub-Networking%2Ftemplate.json)
+
+## NSG Deployment
+
+This template deploys 2 (unassociated) NSGs for the Identity and Storage Subnets. this is required to allow inter-vnet traversal once you deploy the NVA.
+
+
+[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FMark-gx%2FAzureTemplates%2Fmain%2FVirtualNetworks%2FNSG-HUB-AI1%2FNsg.json)
+
+## NVA Deployment
+
+To deploy a NVA (Virtual Firewall/Router) visit my forked repo (Readme) from the OPNAzure project by DMauser: https://github.com/Mark-gx/opnazure, the 2 Nic deployment is best suited for this Hub Network.
+
+Note: this deployment can take a while! make sure to read the readme here: https://github.com/dmauser/opnazure#readme
+
