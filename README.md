@@ -3,7 +3,7 @@ To greatly increase standardization across deployed Azure Services and speed up 
 
 ## Requirements:
 1. Have a paid or trial azure subscription.
-2. Have a resource group called "SharedServices-WestEurope" set up. (still have some hardlinks lingering around to fix)
+2. Have a resource group set up for your Hub / coreservices.
 
 ## What are we bulding?
 We are building the foundations of a HUB and SPOKE network. Hub and spoke networks greatly increase modularity of your environment by grouping together shared services such as NVA's (Firewall/Router), Domain Controllers, Storage Endpoints and ofcourse the option to centrally house VPN Gateways. 
